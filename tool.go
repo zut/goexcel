@@ -5,7 +5,7 @@ package goexcel
 
 import (
 	"errors"
-	"github.com/gounits/goexcel/internal"
+	"github.com/zut/goexcel/internal"
 	"reflect"
 	"strings"
 )

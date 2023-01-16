@@ -5,8 +5,8 @@
 package internal_test
 
 import (
-	"github.com/gounits/goexcel/internal"
 	"github.com/stretchr/testify/assert"
+	"github.com/zut/goexcel/internal"
 	"testing"
 )
 

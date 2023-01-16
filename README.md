@@ -4,7 +4,7 @@ Excel reading and writing based on Go structs
 
 ## Install
 
-     go get github.com/gounits/goexcel
+     go get github.com/zut/goexcel
 
 ## usage
 
@@ -13,7 +13,7 @@ Excel reading and writing based on Go structs
 ```go
 package main
 
-import "github.com/gounits/goexcel"
+import "github.com/zut/goexcel"
 
 type Test struct {
 	Name     string   `excel:"name"`
@@ -42,7 +42,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/gounits/goexcel"
+	"github.com/zut/goexcel"
 )
 
 type Test struct {

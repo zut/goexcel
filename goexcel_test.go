@@ -5,8 +5,8 @@ package goexcel_test
 
 import (
 	"fmt"
-	"github.com/gounits/goexcel"
 	"github.com/stretchr/testify/assert"
+	"github.com/zut/goexcel"
 	"os"
 	"testing"
 )
