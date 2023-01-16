@@ -11,18 +11,15 @@ import (
 	"strings"
 )
 
-// SaveExcel save data to excel.
-//
-// must be implemented Excel interface.
-func SaveExcel[T ~[]E, E IExcel](filepath string, data T) error {
+func saveExcelOriginal[T ~[]E, E IExcel](data T) (*excelize.File, error) {
 	xlsx := excelize.NewFile()
 	if len(data) == 0 {
-		return errors.New("data is empty")
+		return nil, errors.New("data is empty")
 	}
 	sheet := data[0].GetSheetName()
 	index, err := xlsx.NewSheet(sheet)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	s := reflect.ValueOf(data)
@@ -56,7 +53,7 @@ func SaveExcel[T ~[]E, E IExcel](filepath string, data T) error {
 
 			if i == 0 {
 				if err := xlsx.SetCellValue(sheet, fmt.Sprintf("%s%d", column, i+1), tag); err != nil {
-					return err
+					return nil, err
 				}
 			}
 			if split != "" {
@@ -64,20 +61,47 @@ func SaveExcel[T ~[]E, E IExcel](filepath string, data T) error {
 				value := strings.Join(vs, split)
 				err = xlsx.SetCellValue(sheet, fmt.Sprintf("%s%d", column, i+2), value)
 				if err != nil {
-					return err
+					return nil, err
 				}
 			} else {
 				err = xlsx.SetCellValue(sheet, fmt.Sprintf("%s%d", column, i+2), elem.Field(j).Interface())
 				if err != nil {
-					return err
+					return nil, err
 				}
 			}
 		}
 	}
 	xlsx.SetActiveSheet(index)
 	if err := xlsx.DeleteSheet("Sheet1"); err != nil {
+		return nil, err
+	}
+	return xlsx, nil
+}
+
+// SaveExcel save data to excel.
+//
+// must be implemented Excel interface.
+
+func SaveExcel[T ~[]E, E IExcel](filepath string, data T) error {
+	xlsx, err := saveExcelOriginal(data)
+	if err != nil {
 		return err
 	}
 	err = xlsx.SaveAs(filepath)
+	b, _ := xlsx.WriteToBuffer()
+	fmt.Println(b.Bytes())
+	fmt.Println(b.Len())
 	return nil
+}
+
+func SaveExcelBytes[T ~[]E, E IExcel](data T) ([]byte, error) {
+	xlsx, err := saveExcelOriginal(data)
+	if err != nil {
+		return nil, err
+	}
+	b, err := xlsx.WriteToBuffer()
+	if err != nil {
+		return nil, err
+	}
+	return b.Bytes(), nil
 }
