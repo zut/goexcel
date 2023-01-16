@@ -32,8 +32,7 @@ func LoadExcel[T IExcel](filePath string) (data []T, err error) {
 	}
 
 	// get sheet name from Excel interface
-	//sheetName := reflect.New(Object).Interface().(T).GetSheetName()
-	sheetName := "Sheet1"
+	sheetName := reflect.New(Object).Interface().(T).GetSheetName()
 
 	rows, err := file.GetRows(sheetName)
 	if err != nil {

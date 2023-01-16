@@ -17,12 +17,12 @@ func saveExcelOriginal[T ~[]E, E IExcel](data T) (*excelize.File, error) {
 		return nil, errors.New("data is empty")
 	}
 	// 用默认的 Sheet1 就好
-	//sheet := data[0].GetSheetName()
-	//index, err := xlsx.NewSheet(sheet)
-	//if err != nil {
-	//	return nil, err
-	//}
-	sheet := "Sheet1"
+	sheet := data[0].GetSheetName()
+	index, err := xlsx.NewSheet(sheet)
+	if err != nil {
+		return nil, err
+	}
+	//sheet := "Sheet1"
 
 	s := reflect.ValueOf(data)
 
@@ -72,10 +72,10 @@ func saveExcelOriginal[T ~[]E, E IExcel](data T) (*excelize.File, error) {
 			}
 		}
 	}
-	//xlsx.SetActiveSheet(index)
-	//if err := xlsx.DeleteSheet("Sheet1"); err != nil {
-	//	return nil, err
-	//}
+	xlsx.SetActiveSheet(index)
+	if err := xlsx.DeleteSheet("Sheet1"); err != nil {
+		return nil, err
+	}
 	return xlsx, nil
 }
 
