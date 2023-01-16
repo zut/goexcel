@@ -16,11 +16,13 @@ func saveExcelOriginal[T ~[]E, E IExcel](data T) (*excelize.File, error) {
 	if len(data) == 0 {
 		return nil, errors.New("data is empty")
 	}
-	sheet := data[0].GetSheetName()
-	index, err := xlsx.NewSheet(sheet)
-	if err != nil {
-		return nil, err
-	}
+	// 用默认的 Sheet1 就好
+	//sheet := data[0].GetSheetName()
+	//index, err := xlsx.NewSheet(sheet)
+	//if err != nil {
+	//	return nil, err
+	//}
+	sheet := "Sheet1"
 
 	s := reflect.ValueOf(data)
 
@@ -59,22 +61,21 @@ func saveExcelOriginal[T ~[]E, E IExcel](data T) (*excelize.File, error) {
 			if split != "" {
 				vs := elem.Field(j).Interface().([]string)
 				value := strings.Join(vs, split)
-				err = xlsx.SetCellValue(sheet, fmt.Sprintf("%s%d", column, i+2), value)
-				if err != nil {
+				if err := xlsx.SetCellValue(sheet, fmt.Sprintf("%s%d", column, i+2), value); err != nil {
 					return nil, err
 				}
 			} else {
-				err = xlsx.SetCellValue(sheet, fmt.Sprintf("%s%d", column, i+2), elem.Field(j).Interface())
-				if err != nil {
+
+				if err := xlsx.SetCellValue(sheet, fmt.Sprintf("%s%d", column, i+2), elem.Field(j).Interface()); err != nil {
 					return nil, err
 				}
 			}
 		}
 	}
-	xlsx.SetActiveSheet(index)
-	if err := xlsx.DeleteSheet("Sheet1"); err != nil {
-		return nil, err
-	}
+	//xlsx.SetActiveSheet(index)
+	//if err := xlsx.DeleteSheet("Sheet1"); err != nil {
+	//	return nil, err
+	//}
 	return xlsx, nil
 }
 
@@ -88,9 +89,9 @@ func SaveExcel[T ~[]E, E IExcel](filepath string, data T) error {
 		return err
 	}
 	err = xlsx.SaveAs(filepath)
-	b, _ := xlsx.WriteToBuffer()
-	fmt.Println(b.Bytes())
-	fmt.Println(b.Len())
+	//b, _ := xlsx.WriteToBuffer()
+	//fmt.Println(b.Bytes())
+	//fmt.Println(b.Len())
 	return nil
 }
 

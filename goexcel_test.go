@@ -87,7 +87,7 @@ func ExampleLoadExcel() {
 	*/
 	_ = goexcel.SaveExcel("test.xlsx", values)
 	data, _ := goexcel.LoadExcel[*Test]("test.xlsx")
-	fmt.Println(111, data[0])
+	fmt.Println(data[0])
 	_ = os.Remove("test.xlsx")
 	// Output:
 	// &{张三 17 男 [] 0}
