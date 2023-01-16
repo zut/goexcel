@@ -12,11 +12,16 @@ import (
 )
 
 type Test struct {
-	Name     string   `excel:"name"`
+	Name     string   `excel:""`
 	Age      int      `excel:"age"`
 	Sex      string   `excel:"sex"`
 	UserName []string `excel:"userName;|"`
 	High     int      `excel:"-"`
+	Struct2  struct {
+		Name3      string `excel:"Name3"`
+		Name2      string
+		StructName string
+	} `excel:"-"`
 }
 
 func (*Test) GetSheetName() string {
@@ -24,7 +29,23 @@ func (*Test) GetSheetName() string {
 }
 
 func TestSaveExcel(t *testing.T) {
-	values := []*Test{{Name: "张三", Age: 17, Sex: "男", UserName: []string{"a", "b"}}, {Name: "李四", Age: 18, Sex: "女"}}
+	values := []*Test{
+		{
+			Name:     "张三",
+			Age:      17,
+			Sex:      "男",
+			UserName: []string{"a", "b"},
+			High:     0,
+			Struct2: struct {
+				Name3      string `excel:"Name3"`
+				Name2      string
+				StructName string
+			}{
+				Name3:      "Name3",
+				Name2:      "Name2",
+				StructName: "StructNameStructName",
+			},
+		}, {Name: "李四", Age: 18, Sex: "女"}}
 	err := goexcel.SaveExcel("test.xlsx", values)
 	assert.NoError(t, err)
 

@@ -38,6 +38,9 @@ func saveExcelOriginal[T ~[]E, E IExcel](data T) (*excelize.File, error) {
 		for j := 0; j < elemType.NumField(); j++ {
 			field := elemType.Field(j)
 			tags := field.Tag.Get("excel")
+			if tags == "" && field.Name != "" { // 默认 tags
+				tags = field.Name
+			}
 			if tags == "" || tags == "-" {
 				continue
 			}

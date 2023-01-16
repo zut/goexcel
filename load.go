@@ -61,6 +61,9 @@ func LoadExcel[T IExcel](filePath string) (data []T, err error) {
 		for i := 0; i < value.NumField(); i++ {
 			field := value.Type().Field(i)
 			tags := field.Tag.Get("excel")
+			if tags == "" && field.Name != "" { // 默认 tags
+				tags = field.Name
+			}
 			if tags == "" || tags == "-" {
 				continue
 			}
